@@ -1,63 +1,155 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Sparkles, Layers, MessageCircle, ChevronRight } from "lucide-react";
+import StarfieldBackground from "@/components/StarfieldBackground";
+import Header from "@/components/Header";
+import CosmicCard from "@/components/CosmicCard";
+import ReadingProse from "@/components/ReadingProse";
+import StreakBadge from "@/components/StreakBadge";
+import LoadingOrb from "@/components/LoadingOrb";
+import {
+  hasProfile,
+  getProfile,
+  getPreferences,
+  updateStreak,
+  type CosmicProfile,
+  type AppPreferences,
+} from "@/lib/storage";
+import { getGreeting } from "@/lib/astrology";
+
+export default function HomePage() {
+  const router = useRouter();
+  const [profile, setProfile] = useState<CosmicProfile | null>(null);
+  const [prefs, setPrefs] = useState<AppPreferences | null>(null);
+  const [todayReading, setTodayReading] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (!hasProfile()) {
+      router.push("/onboarding");
+      return;
+    }
+    const p = getProfile()!;
+    setProfile(p);
+    const updatedPrefs = updateStreak();
+    setPrefs(updatedPrefs);
+    setReady(true);
+  }, [router]);
+
+  const fetchDailyReading = async () => {
+    if (!profile || loading) return;
+    setLoading(true);
+    setExpanded(true);
+    try {
+      const res = await fetch("/api/reading", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "daily", profile }),
+      });
+      const data = await res.json();
+      setTodayReading(data.reading);
+    } catch {
+      setTodayReading("The stars are a bit cloudy right now. Please try again in a moment.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!ready) return null;
+
+  const greeting = getGreeting();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen flex flex-col relative">
+      <StarfieldBackground />
+      <Header />
+
+      <main className="flex-1 relative z-10 px-6 pb-12 max-w-lg mx-auto w-full">
+        {/* Greeting */}
+        <div className="mt-8 mb-8 animate-fade-in">
+          <h1 className="font-serif text-2xl text-star-cream">
+            {greeting}, {profile?.name || "traveler"}
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-star-cream/50 text-sm mt-1 mystical-text">
+            The cosmos is listening
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Streak */}
+        {prefs && prefs.streakCount > 0 && (
+          <div className="mb-6">
+            <StreakBadge count={prefs.streakCount} />
+          </div>
+        )}
+
+        {/* Today's Reading Card */}
+        <CosmicCard
+          className="mb-6 animate-slide-up"
+          onClick={!expanded ? fetchDailyReading : undefined}
+          glowing={!expanded}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-serif text-lg text-moon-gold">
+              {prefs?.primaryMode === "tarot" ? "Today's Card" : "Today's Reading"}
+            </h2>
+            {!expanded && (
+              <span className="text-star-cream/40 text-sm">Tap to reveal</span>
+            )}
+          </div>
+
+          {loading && <LoadingOrb />}
+
+          {todayReading && !loading && (
+            <ReadingProse content={todayReading} />
+          )}
+
+          {!todayReading && !loading && (
+            <p className="text-star-cream/40 mystical-text text-center py-6">
+              Your daily cosmic message awaits...
+            </p>
+          )}
+        </CosmicCard>
+
+        {/* Quick Actions */}
+        <div className="space-y-3 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+          <h3 className="text-star-cream/40 text-xs uppercase tracking-wider mb-2">
+            Explore
+          </h3>
+
+          <Link href="/tarot/one-card">
+            <CosmicCard className="flex items-center justify-between !py-4">
+              <div className="flex items-center gap-3">
+                <Layers size={18} className="text-mystic-purple" />
+                <span className="text-star-cream">Pull a Tarot Card</span>
+              </div>
+              <ChevronRight size={16} className="text-star-cream/30" />
+            </CosmicCard>
+          </Link>
+
+          <Link href="/reading/weekly">
+            <CosmicCard className="flex items-center justify-between !py-4 mt-3">
+              <div className="flex items-center gap-3">
+                <Sparkles size={18} className="text-moon-gold" />
+                <span className="text-star-cream">This Week</span>
+              </div>
+              <ChevronRight size={16} className="text-star-cream/30" />
+            </CosmicCard>
+          </Link>
+
+          <Link href="/ask">
+            <CosmicCard className="flex items-center justify-between !py-4 mt-3">
+              <div className="flex items-center gap-3">
+                <MessageCircle size={18} className="text-sage-whisper" />
+                <span className="text-star-cream">Ask the Stars</span>
+              </div>
+              <ChevronRight size={16} className="text-star-cream/30" />
+            </CosmicCard>
+          </Link>
         </div>
       </main>
     </div>
