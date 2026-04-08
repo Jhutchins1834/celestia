@@ -38,7 +38,7 @@ export async function generateReading(params: {
   }
 
   const message = await client.messages.create({
-    model: "claude-sonnet-4-5-20250514",
+    model: "claude-sonnet-4-5",
     max_tokens: 1024,
     system: SYSTEM_PROMPT,
     messages: [{ role: "user", content: userPrompt }],
@@ -72,7 +72,7 @@ export async function generateTarotReading(params: {
   userPrompt += `\n\nGive a cohesive, narrative interpretation that weaves the cards together. Be specific and insightful. About 200 words for a one-card pull, 300 for three-card, 500 for celtic cross.`;
 
   const message = await client.messages.create({
-    model: "claude-sonnet-4-5-20250514",
+    model: "claude-sonnet-4-5",
     max_tokens: 1024,
     system: SYSTEM_PROMPT,
     messages: [{ role: "user", content: userPrompt }],
