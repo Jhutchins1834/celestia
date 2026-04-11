@@ -36,6 +36,8 @@ const KEYS = {
   profile: "celestia_profile",
   readings: "celestia_readings",
   preferences: "celestia_preferences",
+  avatarIntroSeen: "celestia_avatar_intro_seen",
+  avatarLevelUpsSeen: "celestia_avatar_levelups_seen",
 } as const;
 
 function getItem<T>(key: string): T | null {
@@ -143,6 +145,27 @@ export function toggleMode(): AppPreferences {
   prefs.primaryMode = prefs.primaryMode === "astrology" ? "tarot" : "astrology";
   savePreferences(prefs);
   return prefs;
+}
+
+// Avatar state
+export function getAvatarIntroSeen(): boolean {
+  return getItem<boolean>(KEYS.avatarIntroSeen) ?? false;
+}
+
+export function setAvatarIntroSeen(): void {
+  setItem(KEYS.avatarIntroSeen, true);
+}
+
+export function getAvatarLevelUpsSeen(): number[] {
+  return getItem<number[]>(KEYS.avatarLevelUpsSeen) ?? [];
+}
+
+export function markAvatarLevelUpSeen(day: number): void {
+  const seen = getAvatarLevelUpsSeen();
+  if (!seen.includes(day)) {
+    seen.push(day);
+    setItem(KEYS.avatarLevelUpsSeen, seen);
+  }
 }
 
 // Generate unique ID

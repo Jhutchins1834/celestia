@@ -10,6 +10,7 @@ import CosmicCard from "@/components/CosmicCard";
 import ReadingProse from "@/components/ReadingProse";
 import StreakBadge from "@/components/StreakBadge";
 import LoadingOrb from "@/components/LoadingOrb";
+import CelestialAvatar from "@/components/CelestialAvatar";
 import {
   hasProfile,
   getProfile,
@@ -152,6 +153,8 @@ export default function HomePage() {
           </Link>
         </div>
       </main>
+
+      {prefs && <CelestialAvatar streak={prefs.streakCount} />}
     </div>
   );
 }
