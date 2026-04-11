@@ -118,6 +118,47 @@ body {
   background: linear-gradient(135deg, var(--deep-violet) 0%, var(--mystic-purple) 50%, var(--deep-violet) 100%);
 }
 
+/* Tarot mode obsidian card styling */
+[data-mode="tarot"] .cosmic-card {
+  background: linear-gradient(180deg, #0F0608 0%, #1A0A0E 100%) !important;
+  border-color: var(--antique-gold) !important;
+  border-width: 1px;
+  box-shadow:
+    0 0 24px rgba(120, 20, 35, 0.35),
+    inset 0 1px 0 rgba(201, 168, 106, 0.15);
+}
+
+[data-mode="tarot"] .cosmic-card:hover {
+  border-color: var(--antique-gold) !important;
+  box-shadow:
+    0 0 32px rgba(120, 20, 35, 0.5),
+    inset 0 1px 0 rgba(201, 168, 106, 0.2);
+}
+
+[data-mode="tarot"] .cosmic-card.animate-glow {
+  animation: glowTarotCard 3s ease-in-out infinite;
+}
+
+@keyframes glowTarotCard {
+  0%, 100% {
+    box-shadow:
+      0 0 24px rgba(120, 20, 35, 0.35),
+      inset 0 1px 0 rgba(201, 168, 106, 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 36px rgba(120, 20, 35, 0.5),
+      0 0 12px rgba(201, 168, 106, 0.08),
+      inset 0 1px 0 rgba(201, 168, 106, 0.2);
+  }
+}
+
+/* Tarot mode icon and chevron color shifts */
+[data-mode="tarot"] .tarot-shift-icon {
+  color: var(--antique-gold);
+  transition: color 1200ms ease-in-out;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;

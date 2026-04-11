@@ -132,30 +132,30 @@ export default function HomePage() {
           <Link href="/tarot/one-card">
             <CosmicCard className="flex items-center justify-between !py-4">
               <div className="flex items-center gap-3">
-                <Layers size={18} className="text-mystic-purple" />
+                <Layers size={18} className="text-mystic-purple tarot-shift-icon" />
                 <span className="text-star-cream">Pull a Tarot Card</span>
               </div>
-              <ChevronRight size={16} className="text-star-cream/30" />
+              <ChevronRight size={16} className="text-star-cream/30 tarot-shift-icon" />
             </CosmicCard>
           </Link>
 
           <Link href="/reading/weekly">
             <CosmicCard className="flex items-center justify-between !py-4 mt-3">
               <div className="flex items-center gap-3">
-                <Sparkles size={18} className="text-accent-gold transition-colors duration-[1200ms]" />
+                <Sparkles size={18} className="text-accent-gold transition-colors duration-[1200ms] tarot-shift-icon" />
                 <span className="text-star-cream">This Week</span>
               </div>
-              <ChevronRight size={16} className="text-star-cream/30" />
+              <ChevronRight size={16} className="text-star-cream/30 tarot-shift-icon" />
             </CosmicCard>
           </Link>
 
           <Link href="/ask">
             <CosmicCard className="flex items-center justify-between !py-4 mt-3">
               <div className="flex items-center gap-3">
-                <MessageCircle size={18} className="text-sage-whisper" />
+                <MessageCircle size={18} className="text-sage-whisper tarot-shift-icon" />
                 <span className="text-star-cream">Ask the Stars</span>
               </div>
-              <ChevronRight size={16} className="text-star-cream/30" />
+              <ChevronRight size={16} className="text-star-cream/30 tarot-shift-icon" />
             </CosmicCard>
           </Link>
         </div>
