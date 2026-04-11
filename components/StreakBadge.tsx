@@ -31,14 +31,14 @@ export default function StreakBadge({ count }: StreakBadgeProps) {
 
   return (
     <div className="relative">
-      <div className="flex items-center gap-1.5 text-moon-gold">
+      <div className="flex items-center gap-1.5 text-accent-gold transition-colors duration-[1200ms]">
         <Flame size={18} className={count >= 7 ? "animate-pulse" : ""} />
         <span className="text-sm font-medium">{count} day streak</span>
       </div>
 
       {showCelebration && messages[count] && (
         <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap animate-fade-in">
-          <div className="px-4 py-2 rounded-full bg-moon-gold/10 border border-moon-gold/30 text-moon-gold text-xs mystical-text">
+          <div className="px-4 py-2 rounded-full bg-accent-gold/10 border border-accent-gold/30 text-accent-gold text-xs mystical-text">
             {messages[count]}
           </div>
         </div>

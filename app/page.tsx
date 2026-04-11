@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Sparkles, Layers, MessageCircle, ChevronRight } from "lucide-react";
-import StarfieldBackground from "@/components/StarfieldBackground";
+import AmbientBackground from "@/components/AmbientBackground";
 import Header from "@/components/Header";
 import CosmicCard from "@/components/CosmicCard";
 import ReadingProse from "@/components/ReadingProse";
@@ -29,6 +29,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [ready, setReady] = useState(false);
+  const [mode, setMode] = useState<"astrology" | "tarot">("astrology");
 
   useEffect(() => {
     if (!hasProfile()) {
@@ -39,8 +40,14 @@ export default function HomePage() {
     setProfile(p);
     const updatedPrefs = updateStreak();
     setPrefs(updatedPrefs);
+    setMode(updatedPrefs.primaryMode);
     setReady(true);
   }, [router]);
+
+  const handleModeChange = useCallback((newMode: "astrology" | "tarot") => {
+    setMode(newMode);
+    setPrefs((prev) => (prev ? { ...prev, primaryMode: newMode } : prev));
+  }, []);
 
   const fetchDailyReading = async () => {
     if (!profile || loading) return;
@@ -66,9 +73,9 @@ export default function HomePage() {
   const greeting = getGreeting();
 
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <StarfieldBackground />
-      <Header />
+    <div className="min-h-screen flex flex-col relative" data-mode={mode}>
+      <AmbientBackground mode={mode} />
+      <Header onModeChange={handleModeChange} />
 
       <main className="flex-1 relative z-10 px-6 pb-12 max-w-lg mx-auto w-full">
         {/* Greeting */}
@@ -95,7 +102,7 @@ export default function HomePage() {
           glowing={!expanded}
         >
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-serif text-lg text-moon-gold">
+            <h2 className="font-serif text-lg text-accent-gold transition-colors duration-[1200ms]">
               {prefs?.primaryMode === "tarot" ? "Today's Card" : "Today's Reading"}
             </h2>
             {!expanded && (
@@ -135,7 +142,7 @@ export default function HomePage() {
           <Link href="/reading/weekly">
             <CosmicCard className="flex items-center justify-between !py-4 mt-3">
               <div className="flex items-center gap-3">
-                <Sparkles size={18} className="text-moon-gold" />
+                <Sparkles size={18} className="text-accent-gold transition-colors duration-[1200ms]" />
                 <span className="text-star-cream">This Week</span>
               </div>
               <ChevronRight size={16} className="text-star-cream/30" />

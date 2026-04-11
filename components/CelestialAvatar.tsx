@@ -309,7 +309,7 @@ export default function CelestialAvatar({ streak }: CelestialAvatarProps) {
 
   return (
     <div
-      className="fixed bottom-6 right-6 z-40 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px]"
+      className="fixed bottom-6 right-6 z-40 w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] celestial-avatar-root"
       style={{ pointerEvents: "auto" }}
     >
       {/* Speech Bubble */}

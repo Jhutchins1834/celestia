@@ -5,7 +5,11 @@ import { Moon, Sun, BookOpen, Flame } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getPreferences, toggleMode, type AppPreferences } from "@/lib/storage";
 
-export default function Header() {
+interface HeaderProps {
+  onModeChange?: (mode: "astrology" | "tarot") => void;
+}
+
+export default function Header({ onModeChange }: HeaderProps) {
   const [prefs, setPrefs] = useState<AppPreferences | null>(null);
 
   useEffect(() => {
@@ -15,20 +19,23 @@ export default function Header() {
   const handleToggle = () => {
     const updated = toggleMode();
     setPrefs(updated);
+    onModeChange?.(updated.primaryMode);
   };
+
+  const isTarot = prefs?.primaryMode === "tarot";
 
   return (
     <header className="relative z-10 flex items-center justify-between px-6 py-4">
       <Link href="/" className="flex items-center gap-2 group">
-        <span className="text-moon-gold text-2xl">&#10022;</span>
-        <span className="font-serif text-xl text-star-cream tracking-wide group-hover:text-moon-gold transition-colors">
+        <span className="text-accent-gold text-2xl transition-colors duration-[1200ms]">&#10022;</span>
+        <span className="font-serif text-xl text-star-cream tracking-wide group-hover:text-accent-gold transition-colors">
           Celestia
         </span>
       </Link>
 
       <div className="flex items-center gap-4">
         {prefs && prefs.streakCount > 0 && (
-          <div className="flex items-center gap-1 text-moon-gold/80 text-sm">
+          <div className="flex items-center gap-1 text-accent-gold/80 text-sm transition-colors duration-[1200ms]">
             <Flame size={16} />
             <span>{prefs.streakCount}</span>
           </div>
@@ -45,19 +52,25 @@ export default function Header() {
         {prefs && (
           <button
             onClick={handleToggle}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-moon-gold/20
-                       text-sm text-star-cream/80 hover:border-moon-gold/40 transition-all"
-            aria-label={`Switch to ${prefs.primaryMode === "astrology" ? "tarot" : "astrology"}`}
+            className={`
+              flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm
+              transition-all duration-[1200ms] ease-in-out
+              ${isTarot
+                ? "border-antique-gold/30 text-star-cream/80 hover:border-antique-gold/50"
+                : "border-moon-gold/20 text-star-cream/80 hover:border-moon-gold/40"
+              }
+            `}
+            aria-label={`Switch to ${isTarot ? "astrology" : "tarot"}`}
           >
-            {prefs.primaryMode === "astrology" ? (
+            {isTarot ? (
               <>
-                <Sun size={14} className="text-moon-gold" />
-                <span>Astrology</span>
+                <Moon size={14} className="text-antique-gold" />
+                <span>Tarot</span>
               </>
             ) : (
               <>
-                <Moon size={14} className="text-mystic-purple" />
-                <span>Tarot</span>
+                <Sun size={14} className="text-moon-gold" />
+                <span>Astrology</span>
               </>
             )}
           </button>

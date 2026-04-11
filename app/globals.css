@@ -8,8 +8,22 @@
   --moon-gold: #E8C26B;
   --star-cream: #F4EDE0;
   --sage-whisper: #9BB5A8;
+  --antique-gold: #C9A86A;
+  --oxblood: #2A0A12;
+  --oxblood-light: #3D0F1A;
+  --accent-gold: var(--moon-gold);
   --background: var(--midnight);
   --foreground: var(--star-cream);
+}
+
+/* Tarot mode accent overrides */
+[data-mode="tarot"] {
+  --accent-gold: var(--antique-gold);
+}
+
+/* Protect avatar from accent shifts */
+[data-mode="tarot"] .celestial-avatar-root {
+  --accent-gold: var(--moon-gold);
 }
 
 @theme inline {
@@ -17,8 +31,12 @@
   --color-deep-violet: var(--deep-violet);
   --color-mystic-purple: var(--mystic-purple);
   --color-moon-gold: var(--moon-gold);
+  --color-accent-gold: var(--accent-gold);
+  --color-antique-gold: var(--antique-gold);
   --color-star-cream: var(--star-cream);
   --color-sage-whisper: var(--sage-whisper);
+  --color-oxblood: var(--oxblood);
+  --color-oxblood-light: var(--oxblood-light);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-serif: 'Cormorant Garamond', Georgia, serif;
@@ -57,6 +75,16 @@ body {
 @keyframes glow {
   0%, 100% { box-shadow: 0 0 20px rgba(232, 194, 107, 0.1); }
   50% { box-shadow: 0 0 40px rgba(232, 194, 107, 0.2); }
+}
+
+/* Tarot mode glow uses antique gold */
+[data-mode="tarot"] .animate-glow {
+  animation: glowTarot 3s ease-in-out infinite;
+}
+
+@keyframes glowTarot {
+  0%, 100% { box-shadow: 0 0 20px rgba(201, 168, 106, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(201, 168, 106, 0.25); }
 }
 
 @keyframes slideUp {
