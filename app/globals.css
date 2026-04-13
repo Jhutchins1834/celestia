@@ -185,6 +185,33 @@ body {
   background: linear-gradient(135deg, #2A0A12 0%, #1A0610 100%) !important;
 }
 
+/* Tarot mode: form inputs (textareas, inputs) */
+[data-mode="tarot"] .cosmic-input {
+  background: linear-gradient(180deg, #0A0306 0%, #0F0608 100%) !important;
+  border-color: var(--antique-gold) !important;
+  box-shadow: 0 0 12px rgba(120, 20, 35, 0.15);
+  transition: all 1200ms ease-in-out;
+}
+
+[data-mode="tarot"] .cosmic-input:focus {
+  border-color: var(--antique-gold) !important;
+  box-shadow:
+    0 0 20px rgba(120, 20, 35, 0.35),
+    inset 0 1px 0 rgba(201, 168, 106, 0.1);
+}
+
+[data-mode="tarot"] .cosmic-input::placeholder {
+  color: rgba(201, 168, 106, 0.3);
+}
+
+[data-mode="tarot"] .cosmic-submit-btn {
+  background: rgba(42, 10, 18, 0.8) !important;
+}
+
+[data-mode="tarot"] .cosmic-submit-btn:hover {
+  background: rgba(61, 15, 26, 0.9) !important;
+}
+
 /* Tarot mode icon and chevron color shifts */
 [data-mode="tarot"] .tarot-shift-icon {
   color: var(--antique-gold);

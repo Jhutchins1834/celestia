@@ -83,15 +83,15 @@ export default function AskPage() {
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="What should I focus on this week? Am I on the right path? What energy should I lean into?"
               rows={3}
-              className="w-full px-4 py-3 pr-12 rounded-xl bg-deep-violet/60 border border-accent-gold/20
+              className="cosmic-input w-full px-4 py-3 pr-12 rounded-xl bg-deep-violet/60 border border-accent-gold/20
                          text-star-cream placeholder:text-star-cream/30 resize-none
-                         focus:outline-none focus:border-accent-gold/50 transition-colors"
+                         focus:outline-none focus:border-accent-gold/50 transition-all duration-[1200ms]"
             />
             <button
               type="submit"
               disabled={!question.trim() || loading}
-              className="absolute bottom-3 right-3 p-2 rounded-full bg-mystic-purple/60
-                         text-accent-gold hover:bg-mystic-purple transition-colors
+              className="cosmic-submit-btn absolute bottom-3 right-3 p-2 rounded-full bg-mystic-purple/60
+                         text-accent-gold hover:bg-mystic-purple transition-all duration-[1200ms]
                          disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <Send size={16} />
