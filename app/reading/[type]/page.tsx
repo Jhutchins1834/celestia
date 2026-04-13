@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Heart, Save } from "lucide-react";
-import StarfieldBackground from "@/components/StarfieldBackground";
+import { ArrowLeft, Save } from "lucide-react";
 import Header from "@/components/Header";
 import CosmicCard from "@/components/CosmicCard";
 import ReadingProse from "@/components/ReadingProse";
@@ -42,7 +41,6 @@ export default function ReadingPage() {
         const data = await res.json();
         setReading(data.reading);
 
-        // Auto-save
         saveReading({
           id: generateId(),
           type: type as "daily" | "weekly" | "monthly" | "yearly",
@@ -63,8 +61,7 @@ export default function ReadingPage() {
   }, [type, router]);
 
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <StarfieldBackground />
+    <>
       <Header />
 
       <main className="flex-1 relative z-10 px-6 pb-12 max-w-lg mx-auto w-full">
@@ -76,7 +73,7 @@ export default function ReadingPage() {
           <span className="text-sm">Back</span>
         </button>
 
-        <h1 className="font-serif text-2xl text-moon-gold mb-6">
+        <h1 className="font-serif text-2xl text-accent-gold mb-6">
           {typeLabels[type] || "Reading"}
         </h1>
 
@@ -96,6 +93,6 @@ export default function ReadingPage() {
           )}
         </CosmicCard>
       </main>
-    </div>
+    </>
   );
 }

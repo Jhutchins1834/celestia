@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
-import StarfieldBackground from "@/components/StarfieldBackground";
 import Header from "@/components/Header";
 import CosmicCard from "@/components/CosmicCard";
 import TarotCard from "@/components/TarotCard";
@@ -52,7 +51,6 @@ export default function TarotSpreadPage() {
         setCards(data.cards);
         setInterpretation(data.interpretation);
 
-        // Auto-save
         saveReading({
           id: generateId(),
           type: "tarot",
@@ -79,8 +77,7 @@ export default function TarotSpreadPage() {
   }, [spread, router]);
 
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <StarfieldBackground />
+    <>
       <Header />
 
       <main className="flex-1 relative z-10 px-6 pb-12 max-w-lg mx-auto w-full">
@@ -92,7 +89,7 @@ export default function TarotSpreadPage() {
           <span className="text-sm">Back</span>
         </button>
 
-        <h1 className="font-serif text-2xl text-moon-gold mb-6">
+        <h1 className="font-serif text-2xl text-accent-gold mb-6">
           {spreadLabels[spread] || "Tarot Reading"}
         </h1>
 
@@ -102,7 +99,6 @@ export default function TarotSpreadPage() {
           </CosmicCard>
         ) : (
           <>
-            {/* Cards Display */}
             <div className={`flex flex-wrap justify-center gap-4 mb-8 ${
               spread === "celtic-cross" ? "gap-3" : "gap-6"
             }`}>
@@ -118,9 +114,8 @@ export default function TarotSpreadPage() {
               ))}
             </div>
 
-            {/* Interpretation */}
             <CosmicCard>
-              <h2 className="font-serif text-lg text-moon-gold mb-4">
+              <h2 className="font-serif text-lg text-accent-gold mb-4">
                 Interpretation
               </h2>
               <ReadingProse content={interpretation || ""} />
@@ -132,7 +127,6 @@ export default function TarotSpreadPage() {
               )}
             </CosmicCard>
 
-            {/* Try another spread */}
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               {Object.entries(spreadLabels)
                 .filter(([key]) => key !== spread)
@@ -140,8 +134,8 @@ export default function TarotSpreadPage() {
                   <button
                     key={key}
                     onClick={() => router.push(`/tarot/${key}`)}
-                    className="px-4 py-2 rounded-full border border-moon-gold/20
-                               text-star-cream/60 text-sm hover:border-moon-gold/40
+                    className="px-4 py-2 rounded-full border border-accent-gold/20
+                               text-star-cream/60 text-sm hover:border-accent-gold/40
                                hover:text-star-cream transition-all"
                   >
                     {label}
@@ -151,6 +145,6 @@ export default function TarotSpreadPage() {
           </>
         )}
       </main>
-    </div>
+    </>
   );
 }

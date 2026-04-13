@@ -3,17 +3,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Heart, Sparkles, Layers, MessageCircle, Calendar, Star } from "lucide-react";
-import StarfieldBackground from "@/components/StarfieldBackground";
 import Header from "@/components/Header";
 import CosmicCard from "@/components/CosmicCard";
 import ReadingProse from "@/components/ReadingProse";
 import { getReadings, toggleFavorite, type SavedReading } from "@/lib/storage";
 
 const typeIcons: Record<string, React.ReactNode> = {
-  daily: <Sparkles size={14} className="text-moon-gold" />,
-  weekly: <Calendar size={14} className="text-moon-gold" />,
-  monthly: <Star size={14} className="text-moon-gold" />,
-  yearly: <Star size={14} className="text-moon-gold" />,
+  daily: <Sparkles size={14} className="text-accent-gold" />,
+  weekly: <Calendar size={14} className="text-accent-gold" />,
+  monthly: <Star size={14} className="text-accent-gold" />,
+  yearly: <Star size={14} className="text-accent-gold" />,
   tarot: <Layers size={14} className="text-mystic-purple" />,
   ask: <MessageCircle size={14} className="text-sage-whisper" />,
 };
@@ -49,8 +48,7 @@ export default function JournalPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <StarfieldBackground />
+    <>
       <Header />
 
       <main className="flex-1 relative z-10 px-6 pb-12 max-w-lg mx-auto w-full">
@@ -62,7 +60,7 @@ export default function JournalPage() {
           <span className="text-sm">Back</span>
         </button>
 
-        <h1 className="font-serif text-2xl text-moon-gold mb-6">
+        <h1 className="font-serif text-2xl text-accent-gold mb-6">
           Your Cosmic Journal
         </h1>
 
@@ -74,7 +72,7 @@ export default function JournalPage() {
               onClick={() => setFilter(opt.value)}
               className={`px-3 py-1.5 rounded-full text-xs transition-all ${
                 filter === opt.value
-                  ? "bg-mystic-purple/60 text-moon-gold border border-moon-gold/30"
+                  ? "bg-mystic-purple/60 text-accent-gold border border-accent-gold/30"
                   : "border border-star-cream/10 text-star-cream/40 hover:text-star-cream/60"
               }`}
             >
@@ -130,7 +128,7 @@ export default function JournalPage() {
                       size={16}
                       className={
                         reading.favorited
-                          ? "fill-moon-gold text-moon-gold"
+                          ? "fill-accent-gold text-accent-gold"
                           : "text-star-cream/20 hover:text-star-cream/40"
                       }
                     />
@@ -165,6 +163,6 @@ export default function JournalPage() {
           </div>
         )}
       </main>
-    </div>
+    </>
   );
 }

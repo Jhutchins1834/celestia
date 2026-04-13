@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Send, Save } from "lucide-react";
-import StarfieldBackground from "@/components/StarfieldBackground";
 import Header from "@/components/Header";
 import CosmicCard from "@/components/CosmicCard";
 import ReadingProse from "@/components/ReadingProse";
@@ -58,8 +57,7 @@ export default function AskPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <StarfieldBackground />
+    <>
       <Header />
 
       <main className="flex-1 relative z-10 px-6 pb-12 max-w-lg mx-auto w-full">
@@ -71,7 +69,7 @@ export default function AskPage() {
           <span className="text-sm">Back</span>
         </button>
 
-        <h1 className="font-serif text-2xl text-moon-gold mb-2">
+        <h1 className="font-serif text-2xl text-accent-gold mb-2">
           Ask the Stars
         </h1>
         <p className="text-star-cream/50 text-sm mb-6 mystical-text">
@@ -85,15 +83,15 @@ export default function AskPage() {
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="What should I focus on this week? Am I on the right path? What energy should I lean into?"
               rows={3}
-              className="w-full px-4 py-3 pr-12 rounded-xl bg-deep-violet/60 border border-moon-gold/20
+              className="w-full px-4 py-3 pr-12 rounded-xl bg-deep-violet/60 border border-accent-gold/20
                          text-star-cream placeholder:text-star-cream/30 resize-none
-                         focus:outline-none focus:border-moon-gold/50 transition-colors"
+                         focus:outline-none focus:border-accent-gold/50 transition-colors"
             />
             <button
               type="submit"
               disabled={!question.trim() || loading}
               className="absolute bottom-3 right-3 p-2 rounded-full bg-mystic-purple/60
-                         text-moon-gold hover:bg-mystic-purple transition-colors
+                         text-accent-gold hover:bg-mystic-purple transition-colors
                          disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <Send size={16} />
@@ -119,6 +117,6 @@ export default function AskPage() {
           </CosmicCard>
         )}
       </main>
-    </div>
+    </>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import StarfieldBackground from "@/components/StarfieldBackground";
 import CosmicCard from "@/components/CosmicCard";
 import { getSunSign } from "@/lib/astrology";
 import { saveProfile, type CosmicProfile } from "@/lib/storage";
@@ -41,8 +40,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 relative">
-      <StarfieldBackground />
+    <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 relative z-10">
 
       {step === "welcome" && (
         <div className="relative z-10 text-center max-w-md animate-fade-in">

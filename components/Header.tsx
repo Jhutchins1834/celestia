@@ -3,26 +3,18 @@
 import Link from "next/link";
 import { Moon, Sun, BookOpen, Flame } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getPreferences, toggleMode, type AppPreferences } from "@/lib/storage";
+import { getPreferences, type AppPreferences } from "@/lib/storage";
+import { useMode } from "@/components/ModeProvider";
 
-interface HeaderProps {
-  onModeChange?: (mode: "astrology" | "tarot") => void;
-}
-
-export default function Header({ onModeChange }: HeaderProps) {
+export default function Header() {
+  const { mode, handleToggle } = useMode();
   const [prefs, setPrefs] = useState<AppPreferences | null>(null);
 
   useEffect(() => {
     setPrefs(getPreferences());
   }, []);
 
-  const handleToggle = () => {
-    const updated = toggleMode();
-    setPrefs(updated);
-    onModeChange?.(updated.primaryMode);
-  };
-
-  const isTarot = prefs?.primaryMode === "tarot";
+  const isTarot = mode === "tarot";
 
   return (
     <header className="relative z-10 flex items-center justify-between px-6 py-4">
@@ -49,32 +41,30 @@ export default function Header({ onModeChange }: HeaderProps) {
           <BookOpen size={20} />
         </Link>
 
-        {prefs && (
-          <button
-            onClick={handleToggle}
-            className={`
-              flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm
-              transition-all duration-[1200ms] ease-in-out
-              ${isTarot
-                ? "border-antique-gold/30 text-star-cream/80 hover:border-antique-gold/50"
-                : "border-moon-gold/20 text-star-cream/80 hover:border-moon-gold/40"
-              }
-            `}
-            aria-label={`Switch to ${isTarot ? "astrology" : "tarot"}`}
-          >
-            {isTarot ? (
-              <>
-                <Moon size={14} className="text-antique-gold" />
-                <span>Tarot</span>
-              </>
-            ) : (
-              <>
-                <Sun size={14} className="text-moon-gold" />
-                <span>Astrology</span>
-              </>
-            )}
-          </button>
-        )}
+        <button
+          onClick={handleToggle}
+          className={`
+            flex items-center gap-2 px-3 py-1.5 rounded-full border text-sm
+            transition-all duration-[1200ms] ease-in-out
+            ${isTarot
+              ? "border-antique-gold/30 text-star-cream/80 hover:border-antique-gold/50"
+              : "border-moon-gold/20 text-star-cream/80 hover:border-moon-gold/40"
+            }
+          `}
+          aria-label={`Switch to ${isTarot ? "astrology" : "tarot"}`}
+        >
+          {isTarot ? (
+            <>
+              <Moon size={14} className="text-antique-gold" />
+              <span>Tarot</span>
+            </>
+          ) : (
+            <>
+              <Sun size={14} className="text-moon-gold" />
+              <span>Astrology</span>
+            </>
+          )}
+        </button>
       </div>
     </header>
   );

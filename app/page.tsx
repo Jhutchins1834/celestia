@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Sparkles, Layers, MessageCircle, ChevronRight, Grid3X3, CircleDot } from "lucide-react";
-import AmbientBackground from "@/components/AmbientBackground";
+import { Sparkles, Layers, MessageCircle, ChevronRight, Grid3X3 } from "lucide-react";
 import Header from "@/components/Header";
 import CosmicCard from "@/components/CosmicCard";
 import TarotCard from "@/components/TarotCard";
@@ -12,6 +11,7 @@ import ReadingProse from "@/components/ReadingProse";
 import StreakBadge from "@/components/StreakBadge";
 import LoadingOrb from "@/components/LoadingOrb";
 import CelestialAvatar from "@/components/CelestialAvatar";
+import { useMode } from "@/components/ModeProvider";
 import {
   hasProfile,
   getProfile,
@@ -37,10 +37,10 @@ interface DrawnCard {
 
 export default function HomePage() {
   const router = useRouter();
+  const { mode } = useMode();
   const [profile, setProfile] = useState<CosmicProfile | null>(null);
   const [prefs, setPrefs] = useState<AppPreferences | null>(null);
   const [ready, setReady] = useState(false);
-  const [mode, setMode] = useState<"astrology" | "tarot">("astrology");
 
   // Astrology daily reading state
   const [todayReading, setTodayReading] = useState<string | null>(null);
@@ -61,7 +61,6 @@ export default function HomePage() {
     setProfile(p);
     const updatedPrefs = updateStreak();
     setPrefs(updatedPrefs);
-    setMode(updatedPrefs.primaryMode);
 
     // Check for existing Card of the Day
     const existingCotd = getTarotCardOfTheDay();
@@ -72,11 +71,6 @@ export default function HomePage() {
 
     setReady(true);
   }, [router]);
-
-  const handleModeChange = useCallback((newMode: "astrology" | "tarot") => {
-    setMode(newMode);
-    setPrefs((prev) => (prev ? { ...prev, primaryMode: newMode } : prev));
-  }, []);
 
   // Astrology: fetch daily reading
   const fetchDailyReading = async () => {
@@ -102,7 +96,6 @@ export default function HomePage() {
   const fetchCardOfTheDay = async () => {
     if (!profile || cotdLoading) return;
 
-    // If already have today's card, just expand
     const existing = getTarotCardOfTheDay();
     if (existing) {
       setCotd(existing);
@@ -137,7 +130,6 @@ export default function HomePage() {
       saveTarotCardOfTheDay(newCotd);
       setCotd(newCotd);
 
-      // Also save to journal
       saveReading({
         id: generateId(),
         type: "tarot",
@@ -162,9 +154,8 @@ export default function HomePage() {
   const isTarot = mode === "tarot";
 
   return (
-    <div className="min-h-screen flex flex-col relative" data-mode={mode}>
-      <AmbientBackground mode={mode} />
-      <Header onModeChange={handleModeChange} />
+    <>
+      <Header />
 
       <main className="flex-1 relative z-10 px-6 pb-12 max-w-lg mx-auto w-full">
         {/* Greeting */}
@@ -186,7 +177,6 @@ export default function HomePage() {
 
         {/* ===== FEATURED CARD ===== */}
         {isTarot ? (
-          /* --- Tarot: Card of the Day --- */
           <CosmicCard
             className="mb-6 animate-slide-up"
             onClick={!cotdExpanded ? fetchCardOfTheDay : undefined}
@@ -225,7 +215,6 @@ export default function HomePage() {
             )}
           </CosmicCard>
         ) : (
-          /* --- Astrology: Today's Reading --- */
           <CosmicCard
             className="mb-6 animate-slide-up"
             onClick={!astroExpanded ? fetchDailyReading : undefined}
@@ -261,7 +250,6 @@ export default function HomePage() {
           </h3>
 
           {isTarot ? (
-            /* --- Tarot mode actions --- */
             <>
               <Link href="/tarot/three-card">
                 <CosmicCard className="flex items-center justify-between !py-4">
@@ -294,7 +282,6 @@ export default function HomePage() {
               </Link>
             </>
           ) : (
-            /* --- Astrology mode actions --- */
             <>
               <Link href="/tarot/one-card">
                 <CosmicCard className="flex items-center justify-between !py-4">
@@ -331,6 +318,6 @@ export default function HomePage() {
       </main>
 
       {prefs && <CelestialAvatar streak={prefs.streakCount} />}
-    </div>
+    </>
   );
 }
