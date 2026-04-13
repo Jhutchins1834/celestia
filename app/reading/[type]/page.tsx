@@ -11,7 +11,7 @@ import { getProfile, saveReading, generateId } from "@/lib/storage";
 
 const typeLabels: Record<string, string> = {
   daily: "Daily Reading",
-  weekly: "Weekly Reading",
+  weekly: "Seven Days of Sky",
   monthly: "Monthly Reading",
   yearly: "Yearly Reading",
 };

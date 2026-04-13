@@ -12,7 +12,7 @@ export interface CosmicProfile {
 
 export interface SavedReading {
   id: string;
-  type: "daily" | "weekly" | "monthly" | "yearly" | "ask" | "tarot";
+  type: "daily" | "weekly" | "monthly" | "yearly" | "ask" | "tarot" | "moon-phase";
   title: string;
   content: string;
   date: string;

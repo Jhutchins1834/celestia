@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Sparkles, Layers, MessageCircle, ChevronRight, Grid3X3 } from "lucide-react";
+import { Sparkles, Layers, MessageCircle, ChevronRight, Grid3X3, Moon } from "lucide-react";
 import Header from "@/components/Header";
 import CosmicCard from "@/components/CosmicCard";
 import TarotCard from "@/components/TarotCard";
@@ -283,11 +283,11 @@ export default function HomePage() {
             </>
           ) : (
             <>
-              <Link href="/tarot/one-card">
+              <Link href="/reading/moon-phase">
                 <CosmicCard className="flex items-center justify-between !py-4">
                   <div className="flex items-center gap-3">
-                    <Layers size={18} className="text-mystic-purple tarot-shift-icon" />
-                    <span className="text-star-cream">Pull a Tarot Card</span>
+                    <Moon size={18} className="text-moon-gold tarot-shift-icon" />
+                    <span className="text-star-cream">Moon Phase</span>
                   </div>
                   <ChevronRight size={16} className="text-star-cream/30 tarot-shift-icon" />
                 </CosmicCard>
@@ -297,7 +297,7 @@ export default function HomePage() {
                 <CosmicCard className="flex items-center justify-between !py-4 mt-3">
                   <div className="flex items-center gap-3">
                     <Sparkles size={18} className="text-accent-gold transition-colors duration-[1200ms] tarot-shift-icon" />
-                    <span className="text-star-cream">This Week</span>
+                    <span className="text-star-cream">Seven Days of Sky</span>
                   </div>
                   <ChevronRight size={16} className="text-star-cream/30 tarot-shift-icon" />
                 </CosmicCard>

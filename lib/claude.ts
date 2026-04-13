@@ -5,36 +5,51 @@ const client = new Anthropic();
 const SYSTEM_PROMPT = `You are Celestia, a wise and warm cosmic guide. You write personalized astrological readings for someone who wants to feel seen and understood. Your voice is poetic but grounded, intelligent, and validating — never condescending, never babyish, never generic. You write for someone smart enough to handle nuance. Reference the current date's approximate planetary transits naturally. Keep readings specific, sensory, and actionable. End with one small reflection or invitation, never a command. Never make medical, financial, or safety claims. This is for reflection and fun.`;
 
 export async function generateReading(params: {
-  type: "daily" | "weekly" | "monthly" | "yearly" | "ask";
+  type: "daily" | "weekly" | "monthly" | "yearly" | "ask" | "moon-phase";
   sunSign: string;
   element: string;
   rulingPlanet: string;
   date: string;
   question?: string;
   name?: string;
+  moonPhase?: string;
+  illumination?: number;
 }): Promise<string> {
-  const wordGuide = {
+  const wordGuide: Record<string, string> = {
     daily: "about 120 words",
     weekly: "about 200 words",
     monthly: "about 300 words",
     yearly: "about 500 words, structured by season",
     ask: "about 150 words",
+    "moon-phase": "about 200 words",
   };
 
-  let userPrompt = `Write a ${params.type} horoscope reading for a ${params.sunSign} (${params.element} sign, ruled by ${params.rulingPlanet}).`;
-  userPrompt += ` Today's date is ${params.date}.`;
-  userPrompt += ` Keep it ${wordGuide[params.type]}.`;
+  let userPrompt: string;
 
-  if (params.name) {
-    userPrompt += ` The reader's name is ${params.name}.`;
-  }
+  if (params.type === "moon-phase" && params.moonPhase) {
+    userPrompt = `Write a moon phase reading for a ${params.sunSign} (${params.element} sign, ruled by ${params.rulingPlanet}).`;
+    userPrompt += ` Today's date is ${params.date}. The current moon phase is ${params.moonPhase} (${Math.round((params.illumination ?? 0) * 100)}% illuminated).`;
+    userPrompt += ` Keep it ${wordGuide["moon-phase"]}.`;
+    if (params.name) {
+      userPrompt += ` The reader's name is ${params.name}.`;
+    }
+    userPrompt += ` Structure the reading as follows: (1) Begin by describing what the ${params.moonPhase} traditionally represents — for example, new moon = setting intentions & new beginnings, waxing phases = growth & action, full moon = culmination & release, waning phases = reflection & letting go. (2) Connect this phase specifically to their ${params.sunSign} energy — how does this phase interact with their elemental nature and ruling planet? (3) Close with a gentle ritual suggestion or invitation tied to the phase (e.g., "tonight is a good night to write down what you're ready to release"). Keep the tone warm, poetic, grounded, and validating.`;
+  } else {
+    userPrompt = `Write a ${params.type} horoscope reading for a ${params.sunSign} (${params.element} sign, ruled by ${params.rulingPlanet}).`;
+    userPrompt += ` Today's date is ${params.date}.`;
+    userPrompt += ` Keep it ${wordGuide[params.type] || "about 150 words"}.`;
 
-  if (params.type === "ask" && params.question) {
-    userPrompt += ` They're asking: "${params.question}"`;
-  }
+    if (params.name) {
+      userPrompt += ` The reader's name is ${params.name}.`;
+    }
 
-  if (params.type === "yearly") {
-    userPrompt += ` Structure the reading by season (Spring, Summer, Autumn, Winter) with a brief intro and closing.`;
+    if (params.type === "ask" && params.question) {
+      userPrompt += ` They're asking: "${params.question}"`;
+    }
+
+    if (params.type === "yearly") {
+      userPrompt += ` Structure the reading by season (Spring, Summer, Autumn, Winter) with a brief intro and closing.`;
+    }
   }
 
   const message = await client.messages.create({

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Heart, Sparkles, Layers, MessageCircle, Calendar, Star } from "lucide-react";
+import { ArrowLeft, Heart, Sparkles, Layers, MessageCircle, Calendar, Star, Moon } from "lucide-react";
 import Header from "@/components/Header";
 import CosmicCard from "@/components/CosmicCard";
 import ReadingProse from "@/components/ReadingProse";
@@ -15,6 +15,7 @@ const typeIcons: Record<string, React.ReactNode> = {
   yearly: <Star size={14} className="text-accent-gold" />,
   tarot: <Layers size={14} className="text-mystic-purple" />,
   ask: <MessageCircle size={14} className="text-sage-whisper" />,
+  "moon-phase": <Moon size={14} className="text-moon-gold" />,
 };
 
 const filterOptions = [
@@ -23,6 +24,7 @@ const filterOptions = [
   { value: "weekly", label: "Weekly" },
   { value: "tarot", label: "Tarot" },
   { value: "ask", label: "Questions" },
+  { value: "moon-phase", label: "Moon" },
   { value: "favorites", label: "Favorites" },
 ];
 

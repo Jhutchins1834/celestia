@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateReading } from "@/lib/claude";
+import { getCurrentMoonPhase } from "@/lib/moon";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +14,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const validTypes = ["daily", "weekly", "monthly", "yearly", "ask"];
+    const validTypes = ["daily", "weekly", "monthly", "yearly", "ask", "moon-phase"];
     if (!validTypes.includes(type)) {
       return NextResponse.json(
         { error: "Invalid reading type" },
@@ -28,6 +29,9 @@ export async function POST(request: NextRequest) {
       day: "numeric",
     });
 
+    // Calculate moon phase server-side for moon-phase readings
+    const moonData = type === "moon-phase" ? getCurrentMoonPhase(new Date()) : undefined;
+
     const reading = await generateReading({
       type,
       sunSign: profile.sunSign,
@@ -36,9 +40,14 @@ export async function POST(request: NextRequest) {
       date: today,
       question: type === "ask" ? question : undefined,
       name: profile.name !== "Cosmic Traveler" ? profile.name : undefined,
+      moonPhase: moonData?.phase,
+      illumination: moonData?.illumination,
     });
 
-    return NextResponse.json({ reading });
+    return NextResponse.json({
+      reading,
+      ...(moonData && { moonPhase: moonData }),
+    });
   } catch (error) {
     console.error("Reading API error:", error);
     return NextResponse.json(
