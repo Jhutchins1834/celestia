@@ -5,7 +5,7 @@ import { generateTarotReading } from "@/lib/claude";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { spread, profile } = body;
+    const { spread, profile, question } = body;
 
     if (!spread || !profile) {
       return NextResponse.json(
@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
       element: profile.element,
       date: today,
       name: profile.name !== "Cosmic Traveler" ? profile.name : undefined,
+      question,
     });
 
     return NextResponse.json({

@@ -32,12 +32,19 @@ export interface AppPreferences {
   notificationsAsked: boolean;
 }
 
+export interface TarotCardOfTheDay {
+  date: string; // YYYY-MM-DD
+  card: { name: string; position: string; reversed: boolean; meaning: string; image: string };
+  interpretation: string;
+}
+
 const KEYS = {
   profile: "celestia_profile",
   readings: "celestia_readings",
   preferences: "celestia_preferences",
   avatarIntroSeen: "celestia_avatar_intro_seen",
   avatarLevelUpsSeen: "celestia_avatar_levelups_seen",
+  tarotCardOfTheDay: "celestia_tarot_cotd",
 } as const;
 
 function getItem<T>(key: string): T | null {
@@ -166,6 +173,19 @@ export function markAvatarLevelUpSeen(day: number): void {
     seen.push(day);
     setItem(KEYS.avatarLevelUpsSeen, seen);
   }
+}
+
+// Tarot Card of the Day
+export function getTarotCardOfTheDay(): TarotCardOfTheDay | null {
+  const data = getItem<TarotCardOfTheDay>(KEYS.tarotCardOfTheDay);
+  if (!data) return null;
+  const today = new Date().toISOString().split("T")[0];
+  if (data.date !== today) return null; // Expired — new day
+  return data;
+}
+
+export function saveTarotCardOfTheDay(cotd: TarotCardOfTheDay): void {
+  setItem(KEYS.tarotCardOfTheDay, cotd);
 }
 
 // Generate unique ID

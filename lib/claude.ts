@@ -55,6 +55,7 @@ export async function generateTarotReading(params: {
   element: string;
   date: string;
   name?: string;
+  question?: string;
 }): Promise<string> {
   const cardDescriptions = params.cards
     .map(
@@ -67,6 +68,10 @@ export async function generateTarotReading(params: {
 
   if (params.name) {
     userPrompt += `\n\nThe reader's name is ${params.name}.`;
+  }
+
+  if (params.question) {
+    userPrompt += `\n\nThey asked the cards this question: "${params.question}". Frame your interpretation as a response to their question, using the cards as your lens.`;
   }
 
   userPrompt += `\n\nGive a cohesive, narrative interpretation that weaves the cards together. Be specific and insightful. About 200 words for a one-card pull, 300 for three-card, 500 for celtic cross.`;
